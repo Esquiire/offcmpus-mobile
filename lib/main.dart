@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_web_browser/flutter_web_browser.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:mobile_fl/API/GQLConfig.dart';
 import 'package:mobile_fl/screens/Register.dart';
-// import 'package:url_launcher/url_launcher.dart';
 
+// Setup GraphQL Client
+GQLConfig gqlConfiguration = GQLConfig();
 void main() {
-  runApp(MyApp());
+  runApp(GraphQLProvider(
+      client: gqlConfiguration.client,
+      child: CacheProvider(child: AppEntry())));
 }
 
-String backendPath(String path) => "http://10.0.2.2:9010$path";
-
-class MyApp extends StatelessWidget {
+class AppEntry extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

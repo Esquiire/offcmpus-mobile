@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_fl/API/AuthAPI.dart';
+import 'package:mobile_fl/components/AuthWrapper.dart';
 import 'package:mobile_fl/components/Button.dart';
 import 'package:mobile_fl/components/Input.dart';
 import 'package:mobile_fl/constants.dart';
@@ -69,52 +70,56 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext ctx) {
-    return Scaffold(
-        appBar: AppBar(title: Text("Login")),
-        body: Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-            child: Column(children: [
-              Expanded(
-                  flex: 1,
+    return AuthWrapper(
+      authLevel: AuthLevels.UNAUTH,
+      ctx: ctx,
+      body: Scaffold(
+          appBar: AppBar(title: Text("Login")),
+          body: Container(
+              margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Column(children: [
+                Expanded(
+                    flex: 1,
+                    child: Column(
+                      children: [
+                        Input(
+                          label: "Email",
+                          onChange: (String val) {
+                            setFormValue("email", val);
+                          },
+                        ),
+                        Input(
+                          label: "Password",
+                          password: true,
+                          onChange: (String val) {
+                            setFormValue("password", val);
+                          },
+                        )
+                      ],
+                    )),
+                Container(
+                  // constraints: BoxConstraints.expand(height: 80),
                   child: Column(
                     children: [
-                      Input(
-                        label: "Email",
-                        onChange: (String val) {
-                          setFormValue("email", val);
-                        },
-                      ),
-                      Input(
-                        label: "Password",
-                        password: true,
-                        onChange: (String val) {
-                          setFormValue("password", val);
-                        },
+                      errorMsg == null
+                          ? Container()
+                          : Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                              child: Text(errorMsg,
+                                  style: TextStyle(color: Colors.red[700])),
+                            ),
+                      Button(
+                        text: "Continue",
+                        textColor: Colors.white,
+                        backgroundColor:
+                            formValid() ? Constants.pink() : Constants.grey(),
+                        onPress: formValid() ? () => logStudentIn(ctx) : () {},
                       )
                     ],
-                  )),
-              Container(
-                // constraints: BoxConstraints.expand(height: 80),
-                child: Column(
-                  children: [
-                    errorMsg == null
-                        ? Container()
-                        : Container(
-                            margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                            child: Text(errorMsg,
-                                style: TextStyle(color: Colors.red[700])),
-                          ),
-                    Button(
-                      text: "Continue",
-                      textColor: Colors.white,
-                      backgroundColor:
-                          formValid() ? Constants.pink() : Constants.grey(),
-                      onPress: formValid() ? () => logStudentIn(ctx) : () {},
-                    )
-                  ],
-                ),
-              )
-            ])));
+                  ),
+                )
+              ]))),
+    );
   }
 }
 

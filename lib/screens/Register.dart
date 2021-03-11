@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobile_fl/API/AuthAPI.dart';
 import 'package:mobile_fl/API/queries/StudentQuery.dart';
+import 'package:mobile_fl/components/AuthWrapper.dart';
 import 'package:mobile_fl/components/Button.dart';
 import 'package:mobile_fl/components/Input.dart';
 import 'package:mobile_fl/constants.dart';
@@ -72,55 +73,59 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext ctx) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Registration"),
-      ),
-      body: Container(
-        margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-        child: Column(
-          children: [
-            Expanded(
-                flex: 1,
-                child: Column(
-                  children: [
-                    Input(
-                      label: "First Name",
-                      onChange: (String val) {
-                        setFormValue("first_name", val);
-                      },
-                    ),
-                    Input(
-                      label: "Last Name",
-                      onChange: (String val) {
-                        setFormValue("last_name", val);
-                      },
-                    ),
-                    Input(
-                      label: "School Email",
-                      onChange: (String val) {
-                        setFormValue("school_email", val);
-                      },
-                    ),
-                    Input(
-                      label: "Confirm School Email",
-                      onChange: (String val) {
-                        setFormValue("school_email_confirm", val);
-                      },
-                    )
-                  ],
-                )),
-            Container(
-              // constraints: BoxConstraints.expand(height: 80),
-              child: Button(
-                text: "Continue",
-                textColor: Colors.white,
-                backgroundColor:
-                    formValid() ? Constants.pink() : Constants.grey(),
-                onPress: formValid() ? () => handleSubmit(ctx) : () {},
-              ),
-            )
-          ],
+    return AuthWrapper(
+      ctx: ctx,
+      authLevel: AuthLevels.UNAUTH,
+      body: Scaffold(
+        appBar: AppBar(
+          title: Text("Registration"),
+        ),
+        body: Container(
+          margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          child: Column(
+            children: [
+              Expanded(
+                  flex: 1,
+                  child: Column(
+                    children: [
+                      Input(
+                        label: "First Name",
+                        onChange: (String val) {
+                          setFormValue("first_name", val);
+                        },
+                      ),
+                      Input(
+                        label: "Last Name",
+                        onChange: (String val) {
+                          setFormValue("last_name", val);
+                        },
+                      ),
+                      Input(
+                        label: "School Email",
+                        onChange: (String val) {
+                          setFormValue("school_email", val);
+                        },
+                      ),
+                      Input(
+                        label: "Confirm School Email",
+                        onChange: (String val) {
+                          setFormValue("school_email_confirm", val);
+                        },
+                      )
+                    ],
+                  )),
+              Container(
+                // constraints: BoxConstraints.expand(height: 80),
+                child: Button(
+                  text: "Continue",
+                  textColor: Colors.white,
+                  backgroundColor:
+                      formValid() ? Constants.pink() : Constants.grey(),
+                  onPress: formValid() ? () => handleSubmit(ctx) : () {},
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -325,87 +330,91 @@ class _RegisterPart2State extends State<RegisterPart2> {
       validate(ctx);
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Registration"),
-      ),
-      body: Container(
-        margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-        child: Column(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Column(
-                children: [
-                  Input(
-                    label: "Password",
-                    password: true,
-                    onChange: (String val) {
-                      setFormValue("password", val);
-                    },
-                  ),
-                  Input(
-                    label: "Confirm Password",
-                    password: true,
-                    onChange: (String val) {
-                      setFormValue("password_confirm", val);
-                    },
-                  ),
-                  Row(
-                    children: [
-                      Checkbox(
-                          value: preferredEmailSet(),
-                          onChanged: updateCheckbox),
-                      Text("Use a preferred email address to log in")
-                    ],
-                  ),
-                  preferredEmailSet()
-                      ? Column(
-                          children: [
-                            Input(
-                              label: "Preferred Email",
-                              onChange: (String val) {
-                                setFormValue("preferred_email", val);
-                              },
-                            ),
-                            Input(
-                              label: "Confirm Preferred Email",
-                              onChange: (String val) {
-                                setFormValue("preferred_email_confirm", val);
-                              },
-                            ),
-                          ],
-                        )
-                      : Container()
-                ],
+    return AuthWrapper(
+      ctx: ctx,
+      authLevel: AuthLevels.UNAUTH,
+      body: Scaffold(
+        appBar: AppBar(
+          title: Text("Registration"),
+        ),
+        body: Container(
+          margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          child: Column(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Column(
+                  children: [
+                    Input(
+                      label: "Password",
+                      password: true,
+                      onChange: (String val) {
+                        setFormValue("password", val);
+                      },
+                    ),
+                    Input(
+                      label: "Confirm Password",
+                      password: true,
+                      onChange: (String val) {
+                        setFormValue("password_confirm", val);
+                      },
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                            value: preferredEmailSet(),
+                            onChanged: updateCheckbox),
+                        Text("Use a preferred email address to log in")
+                      ],
+                    ),
+                    preferredEmailSet()
+                        ? Column(
+                            children: [
+                              Input(
+                                label: "Preferred Email",
+                                onChange: (String val) {
+                                  setFormValue("preferred_email", val);
+                                },
+                              ),
+                              Input(
+                                label: "Confirm Preferred Email",
+                                onChange: (String val) {
+                                  setFormValue("preferred_email_confirm", val);
+                                },
+                              ),
+                            ],
+                          )
+                        : Container()
+                  ],
+                ),
               ),
-            ),
-            Container(
-              // constraints: BoxConstraints.expand(height: 80),
-              child: Column(
-                children: [
-                  error_msg == null
-                      ? Container()
-                      : Container(
-                          child: Text(
-                            error_msg,
-                            style: TextStyle(color: Colors.red[700]),
+              Container(
+                // constraints: BoxConstraints.expand(height: 80),
+                child: Column(
+                  children: [
+                    error_msg == null
+                        ? Container()
+                        : Container(
+                            child: Text(
+                              error_msg,
+                              style: TextStyle(color: Colors.red[700]),
+                            ),
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                           ),
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                        ),
-                  Button(
-                    text: "Complete",
-                    textColor: Colors.white,
-                    backgroundColor:
-                        formValid() ? Constants.pink() : Constants.grey(),
-                    onPress: formValid()
-                        ? () => handleRegistrationCompletion(ctx)
-                        : () {},
-                  )
-                ],
-              ),
-            )
-          ],
+                    Button(
+                      text: "Complete",
+                      textColor: Colors.white,
+                      backgroundColor:
+                          formValid() ? Constants.pink() : Constants.grey(),
+                      onPress: formValid()
+                          ? () => handleRegistrationCompletion(ctx)
+                          : () {},
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

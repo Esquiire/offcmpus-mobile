@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobile_fl/API/AuthAPI.dart';
 import 'package:mobile_fl/API/GQLConfig.dart';
+import 'package:mobile_fl/components/AuthWrapper.dart';
 import 'package:mobile_fl/screens/Login.dart';
 import 'package:mobile_fl/screens/Register.dart';
 import 'package:hive/hive.dart';
@@ -83,21 +84,25 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext ctx) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Landing"),
-      ),
-      body: Column(
-        children: [
-          TextButton(
-            onPressed: () => goToRegistration(ctx),
-            child: Text("Register"),
-          ),
-          TextButton(
-            onPressed: () => goToLogin(ctx),
-            child: Text("Login"),
-          )
-        ],
+    return AuthWrapper(
+      ctx: ctx,
+      authLevel: AuthLevels.UNAUTH,
+      body: Scaffold(
+        appBar: AppBar(
+          title: Text("Landing"),
+        ),
+        body: Column(
+          children: [
+            TextButton(
+              onPressed: () => goToRegistration(ctx),
+              child: Text("Register"),
+            ),
+            TextButton(
+              onPressed: () => goToLogin(ctx),
+              child: Text("Login"),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -111,11 +116,15 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext ctx) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Search"),
+    return AuthWrapper(
+      authLevel: AuthLevels.STUDENT,
+      ctx: ctx,
+      body: Scaffold(
+        appBar: AppBar(
+          title: Text("Search"),
+        ),
+        body: Text("Search Page"),
       ),
-      body: Text("Search Page"),
     );
   }
 }

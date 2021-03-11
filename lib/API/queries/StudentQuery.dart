@@ -20,12 +20,15 @@ class StudentQuery {
     error
   """;
 
-  String createStudent(
+  static String getNullable(String value) =>
+      value == null ? "\"null\"" : "\"$value\"";
+
+  static String createStudent(
       String firstName, String lastName, String email, String password,
       [String preferredEmail]) {
     return """
       mutation {
-        createStudent(first_name: $firstName, last_name: $lastName, email: $email, password: $password, preferred_email: $preferredEmail) {
+        createStudent(first_name: "$firstName", last_name: "$lastName", email: "$email", password: "$password", preferred_email: ${getNullable(preferredEmail)}) {
           ${StudentAPIResponseFields()}
         }
       }

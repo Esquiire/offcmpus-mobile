@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobile_fl/API/AuthAPI.dart';
+import 'package:mobile_fl/API/queries/StudentQuery.dart';
 import 'package:mobile_fl/components/Button.dart';
 import 'package:mobile_fl/components/Input.dart';
 import 'package:mobile_fl/constants.dart';
+import 'package:mobile_fl/main.dart';
+import 'package:hive/hive.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -141,6 +145,66 @@ class _RegisterPart2State extends State<RegisterPart2> {
     "preferred_email_confirm"
   ];
 
+  // mode == "login" if registration succeeds, but login fails.
+  // that way, when they click the "Complete" button, it will not try to
+  // re-register, it will just try to login with the credentials already
+  // set.
+  String mode = "register";
+  String error_msg;
+
+  void setError(String error_msg_) {
+    setState(() {
+      this.error_msg = error_msg_;
+    });
+  }
+
+  void logStudentIn() {
+    if (!formValid()) return;
+
+    String login_email = form["preferred_email_set"] == "yes"
+        ? form["preferred_email"]
+        : form["school_email"];
+    String login_password = form["password"];
+
+    debugPrint(
+        "Logging in with\n\temail = $login_email\n\tpassword = $login_password");
+
+    // log the student in with their preferred login
+    // email, if set, or their school_email otherwise.
+    AuthAPI.login(login_email, login_password).then((response) {
+      debugPrint(response.toString());
+      // process the auth cookie that is stored in the header
+      AuthAPI.processAuthResponse(response).then((String connectSid) async {
+        if (connectSid != null) {
+          // TODO
+          debugPrint("ConnectSid => $connectSid");
+
+          var student = new StudentState();
+          student.connectSid = connectSid;
+
+          // Store the connectsid information in the
+          // hive box
+          var box = await Hive.openBox("appState");
+          await box.put('student', student);
+
+          // fetch the user's information
+          StudentState.fetchUserData().then((bool success) {
+            if (success)
+              debugPrint("Successfully stored user information!");
+            else
+              debugPrint("Error fetching user data");
+          });
+        } else {
+          debugPrint("Could not find the connect.sid cookie...");
+          setError("Problem logging you in after registration...");
+          setState(() {
+            this.mode = "login";
+          });
+        }
+      });
+    });
+  }
+
   void setFormValue(String key, String value) {
     // only set the value for fields specified
     // in the array.
@@ -152,6 +216,7 @@ class _RegisterPart2State extends State<RegisterPart2> {
   }
 
   bool formValid() {
+    if (form == null) return false;
     int fieldCount = form.keys.length;
 
     // preferred email, confirm preferred email and preferred email set are all optional
@@ -204,7 +269,37 @@ class _RegisterPart2State extends State<RegisterPart2> {
   }
 
   void handleRegistrationCompletion(BuildContext ctx) {
-    // TODO submit form !
+    if (this.mode == "login") {
+      logStudentIn();
+      return;
+    }
+
+    GraphQLClient client = gqlConfiguration.clientToQuery();
+    client
+        .mutate(MutationOptions(
+            document: gql(StudentQuery.createStudent(
+                form["first_name"],
+                form["last_name"],
+                form["school_email"],
+                form["password"],
+                form.containsKey("preferred_email_set") &&
+                        form["preferred_email_set"] == "yes"
+                    ? form["preferred_email_set"]
+                    : form["school_email"]))))
+        .then((QueryResult result) {
+      debugPrint("Result recieved!");
+
+      // process the result
+      if (result.data["createStudent"]["success"] == false) {
+        debugPrint("Registration failed.");
+        setError("Registration failed. Please try again.");
+      } else {
+        debugPrint("Successfully registered!");
+        logStudentIn();
+      }
+    });
+
+    /*
     AuthAPI.login("test@rpi.edu", "password").then((response) {
       debugPrint(response.toString());
       // process the auth cookie that is stored in the header
@@ -214,7 +309,7 @@ class _RegisterPart2State extends State<RegisterPart2> {
         else
           debugPrint("Could not find the connect.sid cookie...");
       });
-    });
+    });*/
   }
 
   bool preferredEmailSet() =>
@@ -288,14 +383,27 @@ class _RegisterPart2State extends State<RegisterPart2> {
             ),
             Container(
               // constraints: BoxConstraints.expand(height: 80),
-              child: Button(
-                text: "Complete",
-                textColor: Colors.white,
-                backgroundColor:
-                    formValid() ? Constants.pink() : Constants.grey(),
-                onPress: formValid()
-                    ? () => handleRegistrationCompletion(ctx)
-                    : () {},
+              child: Column(
+                children: [
+                  error_msg == null
+                      ? Container()
+                      : Container(
+                          child: Text(
+                            error_msg,
+                            style: TextStyle(color: Colors.red[700]),
+                          ),
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                        ),
+                  Button(
+                    text: "Complete",
+                    textColor: Colors.white,
+                    backgroundColor:
+                        formValid() ? Constants.pink() : Constants.grey(),
+                    onPress: formValid()
+                        ? () => handleRegistrationCompletion(ctx)
+                        : () {},
+                  )
+                ],
               ),
             )
           ],

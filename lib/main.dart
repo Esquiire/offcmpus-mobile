@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:mobile_fl/API/AuthAPI.dart';
 import 'package:mobile_fl/API/GQLConfig.dart';
 import 'package:mobile_fl/screens/Register.dart';
+import 'package:hive/hive.dart';
 
 // Setup GraphQL Client
 GQLConfig gqlConfiguration = GQLConfig();
-void main() {
+void main() async {
+  await initHiveForFlutter();
+
+  // register the adapters
+  Hive.registerAdapter(StudentStateAdapter());
+
+  // ! TESTING : Does Hive have persistent data storage ??
+  var box = await Hive.openBox('appState');
+  StudentState student = box.get('student');
+
   runApp(GraphQLProvider(
       client: gqlConfiguration.client,
       child: CacheProvider(child: AppEntry())));

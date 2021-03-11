@@ -86,6 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       Input(
                         label: "Password",
+                        password: true,
                         onChange: (String val) {
                           setFormValue("password", val);
                         },
@@ -99,6 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     errorMsg == null
                         ? Container()
                         : Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                             child: Text(errorMsg,
                                 style: TextStyle(color: Colors.red[700])),
                           ),
@@ -131,5 +133,5 @@ void processAuthAndRoute(BuildContext ctx) async {
   if (student.connectSid == null) return;
 
   // take to the home page!
-  Navigator.pushNamed(ctx, '/search');
+  Navigator.pushNamedAndRemoveUntil(ctx, '/search', (r) => false);
 }

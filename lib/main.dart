@@ -16,8 +16,6 @@ void main() async {
 
   // ? TESTING : Does Hive have persistent data storage ??
   // * ANSWER : Yes, the data does persist after application closes.
-  var box = await Hive.openBox('appState');
-  StudentState student = box.get('student');
 
   // TODO before the app launches (here), see if the student`
   // object has a connect.Sid. If so, try to fetch the
@@ -49,11 +47,23 @@ class AppEntry extends StatelessWidget {
             primarySwatch: Colors.blue),
         initialRoute: '/',
         routes: {
-          '/': (context) => LandingScreen(),
+          '/': (context) => AppEntryScreen(),
+          '/landing': (context) => LandingScreen(),
           '/login': (context) => LoginScreen(),
           '/register': (context) => RegisterScreen(),
           '/search': (context) => SearchScreen(),
         });
+  }
+}
+
+class AppEntryScreen extends StatelessWidget {
+  bool processing = false;
+  @override
+  Widget build(BuildContext ctx) {
+    // we only want to call this once
+    if (!this.processing) checkAuth(ctx);
+    this.processing = true;
+    return Container();
   }
 }
 
@@ -108,4 +118,25 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Text("Search Page"),
     );
   }
+}
+
+/**
+ * Check and verify that the student is authenticated.
+ * If they are authenticated, take them to the authenticated
+ * screen.
+ * Otherwise, take them to the landing screen.
+ */
+void checkAuth(BuildContext ctx) async {
+  var box = await Hive.openBox('appState');
+  StudentState student = box.get('student');
+
+  if (student == null || student.connectSid == null)
+    Navigator.pushNamedAndRemoveUntil(ctx, '/landing', (r) => false);
+
+  return StudentState.fetchUserData().then((bool success) {
+    if (success)
+      Navigator.pushNamedAndRemoveUntil(ctx, '/search', (r) => false);
+    else
+      Navigator.pushNamedAndRemoveUntil(ctx, '/landing', (r) => false);
+  });
 }

@@ -166,7 +166,7 @@ class StudentStateAdapter extends TypeAdapter<StudentState> {
     writer
       // First, write the # of fields that the object contains
       // (for the time being, it is just 1)
-      ..writeByte(1)
+      ..writeByte(3)
       // Then write each of the field, with their corresponding
       // field ids.
       // StudentState => HiveField(0) = connectSid

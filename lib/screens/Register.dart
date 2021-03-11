@@ -9,6 +9,8 @@ import 'package:mobile_fl/constants.dart';
 import 'package:mobile_fl/main.dart';
 import 'package:hive/hive.dart';
 
+import 'Login.dart';
+
 class RegisterScreen extends StatefulWidget {
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
@@ -158,7 +160,7 @@ class _RegisterPart2State extends State<RegisterPart2> {
     });
   }
 
-  void logStudentIn() {
+  void logStudentIn(BuildContext ctx) {
     if (!formValid()) return;
 
     String login_email = form["preferred_email_set"] == "yes"
@@ -172,13 +174,9 @@ class _RegisterPart2State extends State<RegisterPart2> {
     // log the student in with their preferred login
     // email, if set, or their school_email otherwise.
     AuthAPI.login(login_email, login_password).then((response) {
-      debugPrint(response.toString());
       // process the auth cookie that is stored in the header
       AuthAPI.processAuthResponse(response).then((String connectSid) async {
         if (connectSid != null) {
-          // TODO
-          debugPrint("ConnectSid => $connectSid");
-
           var student = new StudentState();
           student.connectSid = connectSid;
 
@@ -188,10 +186,11 @@ class _RegisterPart2State extends State<RegisterPart2> {
           await box.put('student', student);
 
           // fetch the user's information
-          StudentState.fetchUserData().then((bool success) {
-            if (success)
+          StudentState.fetchUserData().then((bool success) async {
+            if (success) {
               debugPrint("Successfully stored user information!");
-            else
+              processAuthAndRoute(ctx);
+            } else
               debugPrint("Error fetching user data");
           });
         } else {
@@ -270,7 +269,7 @@ class _RegisterPart2State extends State<RegisterPart2> {
 
   void handleRegistrationCompletion(BuildContext ctx) {
     if (this.mode == "login") {
-      logStudentIn();
+      logStudentIn(ctx);
       return;
     }
 
@@ -295,7 +294,7 @@ class _RegisterPart2State extends State<RegisterPart2> {
         setError("Registration failed. Please try again.");
       } else {
         debugPrint("Successfully registered!");
-        logStudentIn();
+        logStudentIn(ctx);
       }
     });
 

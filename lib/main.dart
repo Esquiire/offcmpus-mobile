@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobile_fl/API/AuthAPI.dart';
 import 'package:mobile_fl/API/GQLConfig.dart';
+import 'package:mobile_fl/screens/Login.dart';
 import 'package:mobile_fl/screens/Register.dart';
 import 'package:hive/hive.dart';
 
@@ -13,9 +14,16 @@ void main() async {
   // register the adapters
   Hive.registerAdapter(StudentStateAdapter());
 
-  // ! TESTING : Does Hive have persistent data storage ??
+  // ? TESTING : Does Hive have persistent data storage ??
+  // * ANSWER : Yes, the data does persist after application closes.
   var box = await Hive.openBox('appState');
   StudentState student = box.get('student');
+
+  // TODO before the app launches (here), see if the student`
+  // object has a connect.Sid. If so, try to fetch the
+  // user data.
+  // If the session is still active, then log them in automatically.
+  // Otherwise, they need to log in again.
 
   runApp(GraphQLProvider(
       client: gqlConfiguration.client,
@@ -41,10 +49,9 @@ class AppEntry extends StatelessWidget {
             primarySwatch: Colors.blue),
         initialRoute: '/',
         routes: {
-          // When navigating to the "/" route, build the FirstScreen widget.
           '/': (context) => LandingScreen(),
+          '/login': (context) => LoginScreen(),
           '/register': (context) => RegisterScreen(),
-          // When navigating to the "/second" route, build the SecondScreen widget.
           '/search': (context) => SearchScreen(),
         });
   }
@@ -60,15 +67,27 @@ class _LandingScreenState extends State<LandingScreen> {
     Navigator.pushNamed(ctx, '/register');
   }
 
+  void goToLogin(BuildContext ctx) {
+    Navigator.pushNamed(ctx, '/login');
+  }
+
   @override
   Widget build(BuildContext ctx) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Landing"),
       ),
-      body: TextButton(
-        onPressed: () => goToRegistration(ctx),
-        child: Text("Register"),
+      body: Column(
+        children: [
+          TextButton(
+            onPressed: () => goToRegistration(ctx),
+            child: Text("Register"),
+          ),
+          TextButton(
+            onPressed: () => goToLogin(ctx),
+            child: Text("Login"),
+          )
+        ],
       ),
     );
   }

@@ -8,12 +8,12 @@ import 'package:hive/hive.dart';
  * AuthAPI: Handle login / logout requests.
  */
 
-String remote_ip = "192.168.1.49";
+String remote_ip = "192.168.0.14";
 String local_ip = "10.0.2.2";
 
 class Request {
   // TODO set the production backend Url
-  static String backendUrl([String path = ""]) => "http://$remote_ip:9010$path";
+  static String backendUrl([String path = ""]) => "http://$local_ip:9010$path";
 
   /**
    * Create a post request to the target url

@@ -23,6 +23,10 @@ class StudentQuery {
   static String getNullable(String value) =>
       value == null ? "\"null\"" : "\"$value\"";
 
+
+
+
+
   static String createStudent(
       String firstName, String lastName, String email, String password,
       [String preferredEmail]) {

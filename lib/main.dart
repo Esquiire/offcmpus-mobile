@@ -6,6 +6,7 @@ import 'package:mobile_fl/components/AuthWrapper.dart';
 import 'package:mobile_fl/screens/Login.dart';
 import 'package:mobile_fl/screens/Register.dart';
 import 'package:mobile_fl/screens/Search.dart';
+import 'package:mobile_fl/screens/Feed.dart';
 import 'package:hive/hive.dart';
 
 // Setup GraphQL Client
@@ -54,6 +55,7 @@ class AppEntry extends StatelessWidget {
           '/login': (context) => LoginScreen(),
           '/register': (context) => RegisterScreen(),
           '/search': (context) => SearchScreen(),
+          '/feed': (context) => FeedScreen(),
         });
   }
 }

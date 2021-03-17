@@ -1,6 +1,5 @@
 class PropertyQuery {
-
-  static String propertyFields(){ 
+  static String propertyFields() {
     return """
     {
     _id
@@ -48,11 +47,10 @@ class PropertyQuery {
     }
   }""";
   }
+
   static String searchForProperty(
-    double price_start, 
-    double price_end, 
-    int rooms, 
-    double distance) => """
+          double price_start, double price_end, int rooms, double distance) =>
+      """
       query{
         searchForProperties(price_start: $price_start, price_end: $price_end, rooms: $rooms, distance: $distance)
         {
@@ -61,7 +59,7 @@ class PropertyQuery {
           data {
             search_results {
               property {
-                ${propertyFields}
+                ${propertyFields()}
               }
               landlord_first_name
               landlord_last_name

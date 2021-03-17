@@ -5,6 +5,9 @@ import 'package:mobile_fl/API/GQLConfig.dart';
 import 'package:mobile_fl/components/AuthWrapper.dart';
 import 'package:mobile_fl/screens/Login.dart';
 import 'package:mobile_fl/screens/Register.dart';
+import 'package:mobile_fl/components/Input.dart';
+import 'package:mobile_fl/components/Button.dart';
+import 'package:mobile_fl/constants.dart';
 import 'package:hive/hive.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -22,27 +25,26 @@ class _SearchScreenState extends State<SearchScreen> {
         appBar: AppBar(
           title: Text("Search"),
         ),
-        body: Text("Search Page"),
         drawer: Drawer(
           child: ListView(
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
-                child: Text('Drawer Header'),
+                child: Text('Navigation'),
                 decoration: BoxDecoration(
                   color: Colors.blue,
                 ),
               ),
               ListTile(
-                title: Text('Item 1'),
+                title: Text('Feed'),
                 onTap: () {
                   // Update the state of the app.
                   // ...
                 },
               ),
               ListTile(
-                title: Text('Item 2'),
+                title: Text('Search'),
                 onTap: () {
                   // Update the state of the app.
                   // ...
@@ -51,6 +53,34 @@ class _SearchScreenState extends State<SearchScreen> {
             ],
           ),
         ),
+        body: Container(
+            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+            child: Column(children: [
+              Expanded(
+                  flex: 1,
+                  child: Column(
+                    children: [
+                      Input(label: "Price Min"),
+                      Input(label: "Price Max"),
+                      Input(label: "Number of Rooms"),
+                      Input(label: "Distance"),
+                    ],
+                  )),
+              Container(
+                // constraints: BoxConstraints.expand(height: 80),
+                child: Column(
+                  children: [
+                    Button(
+                        text: "Search",
+                        textColor: Colors.white,
+                        backgroundColor: Constants.pink()
+                        //formValid() ? Constants.pink() : Constants.grey()
+                        //onPress: formValid() ? () => searchSubmit(ctx) : () {}
+                        )
+                  ],
+                ),
+              )
+            ])),
       ),
     );
   }

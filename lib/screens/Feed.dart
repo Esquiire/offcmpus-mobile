@@ -25,6 +25,47 @@ class _FeedScreenState extends State<FeedScreen> {
           appBar: AppBar(
             title: Text("Feed"),
           ),
+          drawer: Drawer(
+            child: ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  child: Text('Navigation'),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                ),
+                ListTile(
+                  title: Text('Feed'),
+                  tileColor: Constants.pink(),
+                  leading: Icon(
+                    Icons.dynamic_feed,
+                    color: Colors.pink,
+                    size: 30.0,
+                  ),
+                  onTap: () {
+                    // Update the state of the app.
+                    // ...
+                  },
+                ),
+                ListTile(
+                  title: Text('Search'),
+                  leading: Icon(
+                    Icons.search,
+                    color: Colors.pink,
+                    size: 30.0,
+                  ),
+                  onTap: () {
+                    // Update the state of the app.
+                    // ...
+                    Navigator.pushNamedAndRemoveUntil(
+                        ctx, '/search', (r) => false);
+                  },
+                ),
+              ],
+            ),
+          ),
         ));
   }
 }

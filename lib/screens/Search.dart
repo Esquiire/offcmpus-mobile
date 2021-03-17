@@ -38,13 +38,25 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               ListTile(
                 title: Text('Feed'),
+                leading: Icon(
+                  Icons.dynamic_feed,
+                  color: Colors.pink,
+                  size: 30.0,
+                ),
                 onTap: () {
                   // Update the state of the app.
                   // ...
+                  Navigator.pushNamedAndRemoveUntil(ctx, '/feed', (r) => false);
                 },
               ),
               ListTile(
                 title: Text('Search'),
+                tileColor: Constants.pink(),
+                leading: Icon(
+                  Icons.search,
+                  color: Colors.pink,
+                  size: 30.0,
+                ),
                 onTap: () {
                   // Update the state of the app.
                   // ...

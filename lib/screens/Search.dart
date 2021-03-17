@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobile_fl/API/AuthAPI.dart';
 import 'package:mobile_fl/API/GQLConfig.dart';
+import 'package:mobile_fl/API/queries/PropertyQuery.dart';
 import 'package:mobile_fl/components/AuthWrapper.dart';
 import 'package:mobile_fl/screens/Login.dart';
 import 'package:mobile_fl/screens/Register.dart';
@@ -9,6 +10,8 @@ import 'package:mobile_fl/components/Input.dart';
 import 'package:mobile_fl/components/Button.dart';
 import 'package:mobile_fl/constants.dart';
 import 'package:hive/hive.dart';
+import 'package:mobile_fl/main.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -26,7 +29,6 @@ class _SearchScreenState extends State<SearchScreen> {
       print(e);
     });
   }
-
   @override
   Widget build(BuildContext ctx) {
     return AuthWrapper(
@@ -87,30 +89,36 @@ class _SearchScreenState extends State<SearchScreen> {
                   flex: 1,
                   child: Column(
                     children: [
-                      Input(label: "Price Min"),
-                      Input(label: "Price Max"),
-                      Input(label: "Number of Rooms"),
-                      Input(label: "Distance"),
+                      Query(
+                        options: QueryOptions(
+                            document: gql(PropertyQuery.searchForProperty(
+                                0, 1000, 2, 1000))),
+                        builder: (QueryResult result,
+                            {VoidCallback refetch, FetchMore fetchMore}) {
+                          if (result.hasException) {
+                            return Text(result.exception.toString());
+                          }
+
+                          if (result.isLoading) {
+                            return Text('Loading');
+                          }
+
+                          // it can be either Map or List
+                          List repositories = ["1", "2", "3"];
+
+                          return ListView.builder(
+                              itemCount: repositories.length,
+                              itemBuilder: (context, index) {
+                                final repository = repositories[index];
+
+                                return Text(repository);
+                              });
+                        },
+                      )
                     ],
                   )),
-              Container(
-                // constraints: BoxConstraints.expand(height: 80),
-                child: Column(
-                  children: [
-                    Button(
-                        text: "Search",
-                        textColor: Colors.white,
-                        backgroundColor: Constants.pink()
-                        //formValid() ? Constants.pink() : Constants.grey()
-                        //onPress: formValid() ? () => searchSubmit(ctx) : () {}
-                        )
-                  ],
-                ),
-              )
             ])),
       ),
     );
   }
 }
-
-String getStudentName() {}

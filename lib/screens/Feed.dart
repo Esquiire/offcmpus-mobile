@@ -31,7 +31,7 @@ class _FeedScreenState extends State<FeedScreen> {
               padding: EdgeInsets.zero,
               children: <Widget>[
                 DrawerHeader(
-                  child: Text('Navigation'),
+                  child: Text("placeholder"),
                   decoration: BoxDecoration(
                     color: Colors.blue,
                   ),

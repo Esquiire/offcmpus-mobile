@@ -16,6 +16,17 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  dynamic box;
+  _SearchScreenState() {
+    Hive.openBox('appState').then((_box) {
+      setState(() {
+        this.box = _box;
+      });
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
   @override
   Widget build(BuildContext ctx) {
     return AuthWrapper(
@@ -31,7 +42,11 @@ class _SearchScreenState extends State<SearchScreen> {
             padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
-                child: Text('Navigation'),
+                child: box == null
+                    ? Text("null")
+                    : Text(box.get('student').firstName +
+                        " " +
+                        box.get('student').lastName),
                 decoration: BoxDecoration(
                   color: Colors.blue,
                 ),
@@ -97,3 +112,5 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 }
+
+String getStudentName() {}

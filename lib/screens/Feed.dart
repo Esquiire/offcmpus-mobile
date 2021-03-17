@@ -66,6 +66,9 @@ class _FeedScreenState extends State<FeedScreen> {
               ],
             ),
           ),
+          body: Container(
+            child: Text("Welcome to the feed"),
+          ),
         ));
   }
 }

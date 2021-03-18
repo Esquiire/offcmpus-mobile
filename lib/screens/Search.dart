@@ -28,6 +28,15 @@ class _SearchScreenState extends State<SearchScreen> {
     }).catchError((e) {
       print(e);
     });
+    GraphQLClient client = gqlConfiguration.clientToQuery();
+    client
+        .query(QueryOptions(
+            document: gql(PropertyQuery.searchForProperty(0, 1000, 2, 1000))))
+        .then((QueryResult result) {
+      debugPrint("Result Received!");
+    }).catchError((e) {
+      print(e);
+    });
   }
   @override
   Widget build(BuildContext ctx) {
@@ -88,34 +97,7 @@ class _SearchScreenState extends State<SearchScreen> {
               Expanded(
                   flex: 1,
                   child: Column(
-                    children: [
-                      Query(
-                        options: QueryOptions(
-                            document: gql(PropertyQuery.searchForProperty(
-                                0, 1000, 2, 1000))),
-                        builder: (QueryResult result,
-                            {VoidCallback refetch, FetchMore fetchMore}) {
-                          if (result.hasException) {
-                            return Text(result.exception.toString());
-                          }
-
-                          if (result.isLoading) {
-                            return Text('Loading');
-                          }
-
-                          // it can be either Map or List
-                          List repositories = ["1", "2", "3"];
-
-                          return ListView.builder(
-                              itemCount: repositories.length,
-                              itemBuilder: (context, index) {
-                                final repository = repositories[index];
-
-                                return Text(repository);
-                              });
-                        },
-                      )
-                    ],
+                    children: [],
                   )),
             ])),
       ),

@@ -21,23 +21,29 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   dynamic box;
   _SearchScreenState() {
-    Hive.openBox('appState').then((_box) {
-      setState(() {
-        this.box = _box;
-      });
-    }).catchError((e) {
-      print(e);
-    });
-    GraphQLClient client = gqlConfiguration.clientToQuery();
-    client
-        .query(QueryOptions(
-            document: gql(PropertyQuery.searchForProperty(0, 1000, 2, 1000))))
-        .then((QueryResult result) {
-      debugPrint("Result Received!");
-    }).catchError((e) {
-      print(e);
-    });
+    // open the appState box
+    // Hive.openBox('appState').then((_box) {
+    //   setState(() {
+    //     this.box = _box;
+    //   });
+    // }).catchError((e) {
+    //   print(e);
+    // });
+
+    // get the gql client
+    // GraphQLClient client = gqlConfiguration.clientToQuery();
+
+    // query for the search results
+    // client
+    //     .query(QueryOptions(
+    //         document: gql(PropertyQuery.searchForProperty(0, 1000, 2, 1000))))
+    //     .then((QueryResult result) {
+    //   debugPrint("Result Received!");
+    // }).catchError((e) {
+    //   print(e);
+    // });
   }
+
   @override
   Widget build(BuildContext ctx) {
     return AuthWrapper(
@@ -97,7 +103,28 @@ class _SearchScreenState extends State<SearchScreen> {
               Expanded(
                   flex: 1,
                   child: Column(
-                    children: [],
+                    children: [
+                      Text("Testing 123"),
+                      Query(
+                        options: QueryOptions(
+                            document: gql(PropertyQuery.searchForPropertyGQL()),
+                            variables: {
+                              "price_start": 0,
+                              "price_end": 0,
+                              "rooms": 0,
+                              "distance": 0
+                            } // ???
+                            ),
+                        builder: (QueryResult result,
+                            {VoidCallback refetch, FetchMore fetchMore}) {
+                          if (result.hasException)
+                            return Text(result.exception.toString());
+                          if (result.isLoading) return Text("Loading");
+
+                          return Text("Data successfully loaded!");
+                        },
+                      )
+                    ],
                   )),
             ])),
       ),

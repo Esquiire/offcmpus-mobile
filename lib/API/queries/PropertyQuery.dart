@@ -48,6 +48,41 @@ class PropertyQuery {
   }""";
   }
 
+  static String searchForPropertyGQL() => """
+  query SearchForProperties(
+  \$price_start: Float!,
+  \$price_end: Float!,
+  \$rooms: Int!,
+  \$distance: Float!
+) {
+
+  searchForProperties (
+    price_start: \$price_start,
+    price_end: \$price_end,
+    rooms: \$rooms,
+    distance: \$distance
+  ) {
+    success
+    error
+    data {
+      search_results {
+        property {
+          ...PropertyFields
+        }
+        landlord_first_name
+        landlord_last_name
+        price_range
+        lease_count
+        landlord_rating_avg
+        property_rating_avg
+        landlord_rating_count
+        property_rating_count
+      }
+    }
+  }
+}
+""";
+
   static String searchForProperty(
           double price_start, double price_end, int rooms, double distance) =>
       """

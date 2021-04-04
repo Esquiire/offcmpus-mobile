@@ -110,9 +110,9 @@ class _SearchScreenState extends State<SearchScreen> {
                             document: gql(PropertyQuery.searchForPropertyGQL()),
                             variables: {
                               "price_start": 0,
-                              "price_end": 0,
-                              "rooms": 0,
-                              "distance": 0
+                              "price_end": 10000,
+                              "rooms": 1,
+                              "distance": 1000
                             } // ???
                             ),
                         builder: (QueryResult result,
@@ -120,8 +120,21 @@ class _SearchScreenState extends State<SearchScreen> {
                           if (result.hasException)
                             return Text(result.exception.toString());
                           if (result.isLoading) return Text("Loading");
-
-                          return Text("Data successfully loaded!");
+                          //return Text("Loaded!");
+                          final List<Object> propertyResults =
+                              result.data["searchForProperties"]["data"]
+                                  ["search_results"];
+                          if (propertyResults.length == 0)
+                            return Text("No results for given param");
+                          return ListView.builder(
+                              itemCount: propertyResults.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Container(
+                                  height: 50,
+                                  color: Colors.pink[50],
+                                  child: Center(child: Text('Property')),
+                                );
+                              });
                         },
                       )
                     ],

@@ -67,7 +67,49 @@ class PropertyQuery {
     data {
       search_results {
         property {
-          ...PropertyFields
+              _id
+    landlord
+    address_line
+    address_line_2
+    city
+    state
+    zip
+    
+    # details about a property
+    details {
+      description
+      rooms
+      bathrooms
+      sq_ft
+      furnished
+      has_washer
+      has_heater
+      has_ac
+      property_images {
+        s3_key
+        date_uploaded
+      }
+    }
+
+    # direction information from a property to nearby institutions
+    directions {
+      institution_id
+      
+      foot_walking_directions {
+        distance
+        coordinates
+      }
+      
+      driving_car_directions {
+        distance
+        coordinates
+      }
+
+      cycling_regular_directions {
+        distance
+        coordinates
+      }
+    }
         }
         landlord_first_name
         landlord_last_name

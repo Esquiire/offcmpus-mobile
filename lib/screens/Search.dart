@@ -104,7 +104,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   flex: 1,
                   child: Column(
                     children: [
-                      Text("Testing 123"),
+                      Text("Results"),
                       Query(
                         options: QueryOptions(
                             document: gql(PropertyQuery.searchForPropertyGQL()),
@@ -121,20 +121,31 @@ class _SearchScreenState extends State<SearchScreen> {
                             return Text(result.exception.toString());
                           if (result.isLoading) return Text("Loading");
                           //return Text("Loaded!");
-                          final List<Object> propertyResults =
+                          List<Object> propertyResults =
                               result.data["searchForProperties"]["data"]
                                   ["search_results"];
                           if (propertyResults.length == 0)
                             return Text("No results for given param");
-                          return ListView.builder(
-                              itemCount: propertyResults.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Container(
-                                  height: 50,
-                                  color: Colors.pink[50],
-                                  child: Center(child: Text('Property')),
-                                );
-                              });
+                          return Expanded(
+                              child: ListView.separated(
+                            itemCount: propertyResults.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                height: 50,
+                                color: Colors.pink[50],
+                                child: Center(
+                                    child: Text(result
+                                                .data["searchForProperties"]
+                                            ["data"]["search_results"][index]
+                                        ["property"]["address_line"])),
+                              );
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const Divider(
+                              color: Colors.white,
+                            ),
+                          ));
                         },
                       )
                     ],

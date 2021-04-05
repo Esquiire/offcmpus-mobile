@@ -134,9 +134,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             itemBuilder: (BuildContext context, int index) {
                               return PropertyCard(
                                   result.data["searchForProperties"]["data"]
-                                          ["search_results"][index]["property"]
-                                      ["address_line"],
-                                  "Test");
+                                      ["search_results"][index]);
                             },
                             separatorBuilder:
                                 (BuildContext context, int index) =>

@@ -145,7 +145,13 @@ class _PropertyScreenState extends State<PropertyScreen> {
                             style: TextStyle(color: Colors.red),
                           ),
                   ],
-                )
+                ),
+                SizedBox(height: 10),
+                Text("Description: "),
+                Text(
+                  propertyInfo["property"]["details"]["description"],
+                  style: TextStyle(fontStyle: FontStyle.italic),
+                ),
               ], crossAxisAlignment: CrossAxisAlignment.start))),
     );
   }

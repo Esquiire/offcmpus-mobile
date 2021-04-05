@@ -4,10 +4,12 @@ import 'package:mobile_fl/API/AuthAPI.dart';
 import 'package:mobile_fl/API/GQLConfig.dart';
 import 'package:mobile_fl/API/queries/PropertyQuery.dart';
 import 'package:mobile_fl/components/AuthWrapper.dart';
+import 'package:mobile_fl/components/PropertyCard.dart';
 import 'package:mobile_fl/screens/Login.dart';
 import 'package:mobile_fl/screens/Register.dart';
 import 'package:mobile_fl/components/Input.dart';
 import 'package:mobile_fl/components/Button.dart';
+import 'package:mobile_fl/components/PropertyCard.dart';
 import 'package:mobile_fl/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:mobile_fl/main.dart';
@@ -130,15 +132,11 @@ class _SearchScreenState extends State<SearchScreen> {
                               child: ListView.separated(
                             itemCount: propertyResults.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return Container(
-                                height: 50,
-                                color: Colors.pink[50],
-                                child: Center(
-                                    child: Text(result
-                                                .data["searchForProperties"]
-                                            ["data"]["search_results"][index]
-                                        ["property"]["address_line"])),
-                              );
+                              return PropertyCard(
+                                  result.data["searchForProperties"]["data"]
+                                          ["search_results"][index]["property"]
+                                      ["address_line"],
+                                  "Test");
                             },
                             separatorBuilder:
                                 (BuildContext context, int index) =>

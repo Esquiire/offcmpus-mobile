@@ -139,5 +139,5 @@ void processAuthAndRoute(BuildContext ctx) async {
   if (student.connectSid == null) return;
 
   // take to the home page!
-  Navigator.pushNamedAndRemoveUntil(ctx, '/search', (r) => false);
+  Navigator.pushNamedAndRemoveUntil(ctx, '/userAccess', (r) => false);
 }

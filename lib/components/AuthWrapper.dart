@@ -34,7 +34,7 @@ class AuthWrapper extends StatelessWidget {
         // else if the user is unauthenticated and the view is only for unauthenticated
         // users, take them to the default authenticated route, /search.
         else if (authLevel == AuthLevels.UNAUTH)
-          Navigator.pushNamedAndRemoveUntil(ctx, '/search', (r) => false);
+          Navigator.pushNamedAndRemoveUntil(ctx, '/userAccess', (r) => false);
       }
 
       // If the user is unauthenticated ...

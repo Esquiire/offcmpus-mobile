@@ -18,57 +18,8 @@ class FeedScreen extends StatefulWidget {
 class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext ctx) {
-    return AuthWrapper(
-        authLevel: AuthLevels.STUDENT,
-        ctx: ctx,
-        body: Scaffold(
-          appBar: AppBar(
-            title: Text("Feed"),
-          ),
-          drawer: Drawer(
-            child: ListView(
-              // Important: Remove any padding from the ListView.
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                DrawerHeader(
-                  child: Text("placeholder"),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                  ),
-                ),
-                ListTile(
-                  title: Text('Feed'),
-                  tileColor: Constants.pink(),
-                  leading: Icon(
-                    Icons.dynamic_feed,
-                    color: Colors.pink,
-                    size: 30.0,
-                  ),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                  },
-                ),
-                ListTile(
-                  title: Text('Search'),
-                  leading: Icon(
-                    Icons.search,
-                    color: Colors.pink,
-                    size: 30.0,
-                  ),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                    Navigator.pushNamedAndRemoveUntil(
-                        ctx, '/search', (r) => false);
-                  },
-                ),
-              ],
-            ),
-          ),
-          body: Container(
-            child: Text("Welcome to the feed"),
-          ),
-        ));
+    return Container(
+      child: Text("Welcome to the feed!!!"),
+    );
   }
 }

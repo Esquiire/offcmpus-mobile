@@ -8,6 +8,7 @@ import 'package:mobile_fl/screens/Register.dart';
 import 'package:mobile_fl/screens/Search.dart';
 import 'package:mobile_fl/screens/Feed.dart';
 import 'package:mobile_fl/screens/Property.dart';
+import 'package:mobile_fl/screens/UserAccessBottomNavContainer.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
@@ -60,8 +61,7 @@ class AppEntry extends StatelessWidget {
           '/landing': (context) => LandingScreen(),
           '/login': (context) => LoginScreen(),
           '/register': (context) => RegisterScreen(),
-          '/search': (context) => SearchScreen(),
-          '/feed': (context) => FeedScreen(),
+          '/userAccess': (context) => UserAccessBottomNavContainer(),
           '/property': (context) => PropertyScreen(),
         });
   }
@@ -133,7 +133,7 @@ void checkAuth(BuildContext ctx) async {
 
   return StudentState.fetchUserData().then((bool success) {
     if (success)
-      Navigator.pushNamedAndRemoveUntil(ctx, '/search', (r) => false);
+      Navigator.pushNamedAndRemoveUntil(ctx, '/userAccess', (r) => false);
     else
       Navigator.pushNamedAndRemoveUntil(ctx, '/landing', (r) => false);
   });

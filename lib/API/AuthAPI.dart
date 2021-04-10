@@ -88,6 +88,9 @@ class StudentState {
   @HiveField(2)
   String lastName;
 
+  @HiveField(3)
+  DateTime expiration;
+
   /**
    * @desc Fetch the user information by making a request
    * to the backend with the stored connectSid. There must be
@@ -104,6 +107,12 @@ class StudentState {
       // exist, return false...
       StudentState student = box.get('student');
       if (student == null) return false;
+
+      // check if the current student information is valid.
+      // if so, no need to fetch
+      if (DateTime.now().isBefore(student.expiration)) {
+        return true;
+      }
 
       // make a request to the backend to get the
       // information for the user.
@@ -131,6 +140,18 @@ class StudentState {
         student.firstName = userPayload["user"]["first_name"];
         student.lastName = userPayload["user"]["last_name"];
 
+        // set the expiration time
+        DateTime expiration = new DateTime(
+            DateTime.now().year,
+            DateTime.now().day,
+            DateTime.now().hour,
+            DateTime.now().minute + 5,
+            DateTime.now().second,
+            DateTime.now().millisecond,
+            DateTime.now().microsecond);
+
+        student.expiration = expiration;
+
         // save the updated student
         await box.put("student", student);
 
@@ -153,10 +174,20 @@ class StudentStateAdapter extends TypeAdapter<StudentState> {
     var fields = <int, dynamic>{
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
+    // if no expiration is set, set it to 0
+    var expirationTimeEpoch = 0;
+
+    if (fields.containsKey(3)) {
+      expirationTimeEpoch = int.tryParse(fields[3] as String);
+      if (expirationTimeEpoch == null) expirationTimeEpoch = 0;
+    }
+
     return StudentState()
       ..connectSid = fields[0] as String
       ..firstName = fields[1] as String
-      ..lastName = fields[2] as String;
+      ..lastName = fields[2] as String
+      ..expiration =
+          new DateTime.fromMillisecondsSinceEpoch(expirationTimeEpoch);
     // description: fields[1] as String,
     // complete: fields[2] as bool,
   }
@@ -166,7 +197,7 @@ class StudentStateAdapter extends TypeAdapter<StudentState> {
     writer
       // First, write the # of fields that the object contains
       // (for the time being, it is just 1)
-      ..writeByte(3)
+      ..writeByte(4)
       // Then write each of the field, with their corresponding
       // field ids.
       // StudentState => HiveField(0) = connectSid
@@ -177,6 +208,9 @@ class StudentStateAdapter extends TypeAdapter<StudentState> {
       ..write(obj.firstName)
       // StudentState => HiveField(2) = lastName
       ..writeByte(2)
-      ..write(obj.lastName);
+      ..write(obj.lastName)
+      // StudentState => HiveField(3) = expiration
+      ..writeByte(3)
+      ..write(obj.expiration.millisecondsSinceEpoch.toString());
   }
 }

@@ -13,7 +13,9 @@ import 'package:hive/hive.dart';
 // Setup GraphQL Client
 GQLConfig gqlConfiguration = GQLConfig();
 void main() async {
+  print("Initializing Hive for flutter");
   await initHiveForFlutter();
+  print("Hive initialized for flutter");
 
   // register the adapters
   Hive.registerAdapter(StudentStateAdapter());
@@ -121,6 +123,7 @@ class _LandingScreenState extends State<LandingScreen> {
  * Otherwise, take them to the landing screen.
  */
 void checkAuth(BuildContext ctx) async {
+  print("Checking auth");
   var box = await Hive.openBox('appState');
   StudentState student = box.get('student');
 

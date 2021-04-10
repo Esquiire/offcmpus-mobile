@@ -45,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (connectSid != null) {
           var student = new StudentState();
           student.connectSid = connectSid;
+          student.expiration = DateTime.now();
 
           // Store the connectsid information in the
           // hive box

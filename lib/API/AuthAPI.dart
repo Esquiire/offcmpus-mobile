@@ -3,13 +3,19 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:hive/hive.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /**
  * AuthAPI: Handle login / logout requests.
  */
 
-String remote_ip = "192.168.0.14";
-String local_ip = "10.0.2.2";
+String remote_ip = ""; //"192.168.0.14";
+String local_ip = ""; // "10.0.2.2";
+
+void configureAppVars() {
+  remote_ip = env['ip'];
+  local_ip = "10.0.2.2";
+}
 
 class Request {
   // TODO set the production backend Url
@@ -143,6 +149,7 @@ class StudentState {
         // set the expiration time
         DateTime expiration = new DateTime(
             DateTime.now().year,
+            DateTime.now().month,
             DateTime.now().day,
             DateTime.now().hour,
             DateTime.now().minute + 5,

@@ -9,13 +9,15 @@ import 'package:mobile_fl/screens/Search.dart';
 import 'package:mobile_fl/screens/Feed.dart';
 import 'package:mobile_fl/screens/Property.dart';
 import 'package:hive/hive.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 // Setup GraphQL Client
 GQLConfig gqlConfiguration = GQLConfig();
 void main() async {
-  print("Initializing Hive for flutter");
+  await DotEnv.load(fileName: ".env");
+  configureAppVars();
+
   await initHiveForFlutter();
-  print("Hive initialized for flutter");
 
   // register the adapters
   Hive.registerAdapter(StudentStateAdapter());
@@ -123,7 +125,6 @@ class _LandingScreenState extends State<LandingScreen> {
  * Otherwise, take them to the landing screen.
  */
 void checkAuth(BuildContext ctx) async {
-  print("Checking auth");
   var box = await Hive.openBox('appState');
   StudentState student = box.get('student');
 

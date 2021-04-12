@@ -13,6 +13,7 @@ import 'package:mobile_fl/components/PropertyCard.dart';
 import 'package:mobile_fl/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:mobile_fl/main.dart';
+import 'package:mobile_fl/screens/UserAccessBottomNavContainer.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -45,22 +46,50 @@ class _SearchScreenState extends State<SearchScreen> {
     // });
   }
 
+  void goToFilters(BuildContext ctx) {
+    print("Go to -> Add Filters");
+    Navigator.of(ctx)
+        .push(MaterialPageRoute(builder: (context) => FilterScreen()));
+  }
+
   @override
   Widget build(BuildContext ctx) {
     return Column(
       children: [
         Container(
           alignment: Alignment.centerLeft,
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
           child: Row(
             children: [
-              Text("Filter"),
-              Text(
-                "3 Filters Applied",
-                style: TextStyle(color: Constants.pink(), fontSize: 12),
+              Expanded(
+                  child: Container(
+                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Filter"),
+                    Text(
+                      "3 Filters Applied",
+                      style: TextStyle(color: Constants.pink(), fontSize: 12),
+                    )
+                  ],
+                ),
+              )),
+              GestureDetector(
+                onTap: () => goToFilters(ctx),
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          left: BorderSide(
+                              width: 1, color: Constants.navy(opacity: 0.3)))),
+                  // constraints: BoxConstraints.tightFor(height: 40),
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: Text(
+                    "ADD FILTERS",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+                  ),
+                ),
               )
             ],
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
           decoration: BoxDecoration(
               border: Border(
@@ -87,7 +116,6 @@ class NewPropertyCard extends StatefulWidget {
 class _NewPropertyCardState extends State<NewPropertyCard> {
   @override
   Widget build(BuildContext ctx) => Container(
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
         child: Stack(
           children: [
             Positioned(
@@ -96,11 +124,12 @@ class _NewPropertyCardState extends State<NewPropertyCard> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                 ),
                 right: 10,
-                top: 0),
+                top: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                   margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
                   alignment: Alignment.topLeft,
                   child: Column(
@@ -113,6 +142,7 @@ class _NewPropertyCardState extends State<NewPropertyCard> {
                   ),
                 ),
                 Container(
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                     child: Row(children: (() {
                       List<String> tagStrs = ["Furnished", "Washer", "Heating"];
@@ -134,7 +164,7 @@ class _NewPropertyCardState extends State<NewPropertyCard> {
                     })())),
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                  decoration: BoxDecoration(border: Border.all(width: 1)),
+                  decoration: BoxDecoration(),
                   constraints: BoxConstraints.expand(height: 100),
                   child: ListView(
                     scrollDirection: Axis.horizontal,
@@ -161,6 +191,7 @@ class _NewPropertyCardState extends State<NewPropertyCard> {
                   ),
                 ),
                 Container(
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Text("Roe Jogan / 10 Photos / 4 Reviews",
                       style: TextStyle(fontSize: 12)),
                   margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -189,6 +220,30 @@ class _NewPropertyCardState extends State<NewPropertyCard> {
         ),
       );
 }
+
+class FilterScreen extends StatefulWidget {
+  @override
+  _FilterScreenState createState() => _FilterScreenState();
+}
+
+class _FilterScreenState extends State<FilterScreen> {
+  @override
+  Widget build(BuildContext ctx) => Scaffold(
+      body: AuthWrapper(
+          ctx: ctx,
+          authLevel: AuthLevels.STUDENT,
+          body: Column(
+            children: [
+              AppHeader(
+                "Search Filter",
+                mode: AppHeader.MODE_BACK,
+                parentCtx: ctx,
+              ),
+              Text("Filter Page!")
+            ],
+          )));
+}
+
 /*
 Query(
                     options: QueryOptions(

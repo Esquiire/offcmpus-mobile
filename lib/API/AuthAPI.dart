@@ -19,7 +19,7 @@ void configureAppVars() {
 
 class Request {
   // TODO set the production backend Url
-  static String backendUrl([String path = ""]) => "http://$local_ip:9010$path";
+  static String backendUrl([String path = ""]) => "http://$remote_ip:9010$path";
 
   /**
    * Create a post request to the target url

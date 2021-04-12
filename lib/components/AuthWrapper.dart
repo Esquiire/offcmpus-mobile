@@ -53,5 +53,5 @@ class AuthWrapper extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext ctx) => body;
+  Widget build(BuildContext ctx) => SafeArea(child: body);
 }

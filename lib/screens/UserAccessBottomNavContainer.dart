@@ -43,8 +43,11 @@ class _UserAccessBottomNavContainerState
         authLevel: AuthLevels.STUDENT,
         ctx: ctx,
         body: Scaffold(
-            body: Center(
-              child: views.elementAt(_selectedPage).view,
+            body: Column(
+              children: [
+                AppHeader(views.elementAt(_selectedPage).label),
+                Expanded(child: views.elementAt(_selectedPage).view, flex: 1)
+              ],
             ),
             bottomNavigationBar: BottomNavigationBar(
               items: (() {
@@ -60,4 +63,61 @@ class _UserAccessBottomNavContainerState
               selectedItemColor: Constants.pink(),
             )));
   }
+}
+
+class AppHeader extends StatefulWidget {
+  String header;
+  AppHeader(this.header);
+
+  @override
+  _AppHeaderState createState() => _AppHeaderState();
+}
+
+class _AppHeaderState extends State<AppHeader> {
+  @override
+  Widget build(BuildContext ctx) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+      decoration: BoxDecoration(
+          border: Border(
+              bottom:
+                  BorderSide(color: Constants.navy(opacity: 0.3), width: 1))),
+      child: Row(
+        children: [
+          DrawerButton(),
+          Expanded(
+              child: Container(
+                  child: Text(widget.header,
+                      style: TextStyle(
+                        color: Constants.navy(),
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0))),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                border:
+                    Border.all(color: Constants.navy(opacity: 0.3), width: 1)),
+            constraints: BoxConstraints.tightFor(width: 40, height: 40),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class DrawerButton extends StatefulWidget {
+  @override
+  _DrawerButtonState createState() => _DrawerButtonState();
+}
+
+class _DrawerButtonState extends State<DrawerButton> {
+  @override
+  Widget build(BuildContext ctx) => Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            border: Border.all(color: Constants.navy(opacity: 0.3), width: 1)),
+        constraints: BoxConstraints.tightFor(width: 40, height: 40),
+      );
 }

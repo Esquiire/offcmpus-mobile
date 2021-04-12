@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobile_fl/API/AuthAPI.dart';
@@ -167,26 +169,27 @@ class _NewPropertyCardState extends State<NewPropertyCard> {
                   constraints: BoxConstraints.expand(height: 100),
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    children: [
-                      Container(
-                          color: Colors.red,
-                          constraints: BoxConstraints.tightFor(
-                            width: 200,
-                            height: 100,
-                          )),
-                      Container(
-                          color: Colors.green,
-                          constraints: BoxConstraints.tightFor(
-                            width: 200,
-                            height: 100,
-                          )),
-                      Container(
-                          color: Colors.blue,
-                          constraints: BoxConstraints.tightFor(
-                            width: 200,
-                            height: 100,
-                          ))
-                    ],
+                    children: (() {
+                      List<Widget> imageHolderCards = [];
+
+                      for (int i = 0; i < 10; ++i) {
+                        imageHolderCards.add(Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Color.fromRGBO(
+                                    Random().nextInt(256),
+                                    Random().nextInt(256),
+                                    Random().nextInt(256),
+                                    1.0)),
+                            margin:
+                                EdgeInsets.fromLTRB(i == 0 ? 10 : 0, 0, 10, 0),
+                            constraints: BoxConstraints.tightFor(
+                              width: (Random().nextDouble() * 150) + 100,
+                              height: 100,
+                            )));
+                      }
+                      return imageHolderCards;
+                    })(),
                   ),
                 ),
                 Container(

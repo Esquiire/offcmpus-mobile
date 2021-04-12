@@ -97,13 +97,11 @@ class _SearchScreenState extends State<SearchScreen> {
                   bottom: BorderSide(
                       color: Constants.navy(opacity: 0.3), width: 1))),
         ),
-        SingleChildScrollView(
-            child: Container(
-          alignment: Alignment.topLeft,
-          child: Column(
-            children: [NewPropertyCard(), NewPropertyCard()],
-          ),
-        ))
+        Expanded(child: ListView(children: (() {
+          List<Widget> properties = [];
+          for (int i = 0; i < 10; ++i) properties.add(NewPropertyCard());
+          return properties;
+        })()))
       ],
     );
   }
@@ -195,25 +193,21 @@ class _NewPropertyCardState extends State<NewPropertyCard> {
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Text("Roe Jogan / 10 Photos / 4 Reviews",
                       style: TextStyle(fontSize: 12)),
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        color: Colors.red,
-                        child: Text("Landlord Rating Goes Here"),
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: RatingsComponent(RatingsComponent.TYPE_LANDLORD),
                       ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        color: Colors.orange,
-                        child: Text("Property Rating Goes Here"),
-                      ),
-                    )
-                  ],
+                      Expanded(
+                        flex: 1,
+                        child: RatingsComponent(RatingsComponent.TYPE_PROPERTY),
+                      )
+                    ],
+                  ),
                 )
               ],
             )
@@ -358,11 +352,45 @@ class _FilterScreenState extends State<FilterScreen> {
                   textColor: Colors.white,
                   onPress: () {
                     print("TODO Apply Filters!");
+                    // navigate back to search page
+                    Navigator.pop(ctx);
                   },
                 ),
               )
             ],
           )));
+}
+
+class RatingsComponent extends StatelessWidget {
+  static const int TYPE_LANDLORD = 1;
+  static const int TYPE_PROPERTY = 2;
+
+  int ratingType;
+
+  RatingsComponent(this.ratingType);
+
+  @override
+  Widget build(BuildContext ctx) => Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              child: ratingType == TYPE_LANDLORD
+                  ? Icon(Icons.person_outline)
+                  : Icon(Icons.home),
+            ),
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Text(
+                  "*****",
+                  style: TextStyle(fontSize: 40),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
 }
 
 /*

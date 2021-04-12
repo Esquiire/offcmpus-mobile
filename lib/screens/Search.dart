@@ -14,6 +14,7 @@ import 'package:mobile_fl/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:mobile_fl/main.dart';
 import 'package:mobile_fl/screens/UserAccessBottomNavContainer.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -47,7 +48,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void goToFilters(BuildContext ctx) {
-    print("Go to -> Add Filters");
+    // navigate to the filters screen
     Navigator.of(ctx)
         .push(MaterialPageRoute(builder: (context) => FilterScreen()));
   }
@@ -227,6 +228,22 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
+  void _selectDate(BuildContext ctx, String type) async // "end")
+  {
+    // type == "start" | "end"
+    DateTime start = DateTime.now();
+    // set end to 5 years in future
+    DateTime end = new DateTime(start.year + 5, start.month, start.day);
+    // TODO set initialDate to be the currently selected date, if one is selcted, or DateTime.now() otherwise
+
+    final DateTime dtPicked = await showDatePicker(
+        context: ctx,
+        initialDate: DateTime.now(),
+        firstDate: start,
+        lastDate: end);
+    print("DT Picked => $dtPicked");
+  }
+
   @override
   Widget build(BuildContext ctx) => Scaffold(
       body: AuthWrapper(
@@ -239,7 +256,111 @@ class _FilterScreenState extends State<FilterScreen> {
                 mode: AppHeader.MODE_BACK,
                 parentCtx: ctx,
               ),
-              Text("Filter Page!")
+              Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                      // TODO make button w/ more-info modal or something...
+                      child: Button(
+                        text: "Auto-Apply Search Status",
+                        backgroundColor: Constants.grey(),
+                        textColor: Constants.navy(),
+                      ),
+                    ),
+                    Container(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Price Range",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            RangeSlider(
+                                activeColor: Constants.pink(),
+                                inactiveColor: Constants.grey(),
+                                min: 300,
+                                max: 1000,
+                                values: const RangeValues(400, 500),
+                                onChanged: (RangeValues values) {
+                                  // TODO update price range on change
+                                })
+                          ],
+                        )),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Text(
+                              "Number of Rooms",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          ),
+                          NumberPicker(
+                              axis: Axis.horizontal,
+                              minValue: 1,
+                              maxValue: 4,
+                              value: 1,
+                              onChanged: (value) {
+                                // TODO update number of rooms on change
+                              })
+                        ],
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Lease Start / End Date",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Button(
+                              text: "Select Start Date",
+                              backgroundColor: Constants.grey(),
+                              textColor: Constants.navy(),
+                              onPress: () => _selectDate(ctx, "start"),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: Button(
+                              text: "Select End Date",
+                              backgroundColor: Constants.grey(),
+                              textColor: Constants.navy(),
+                              onPress: () => _selectDate(ctx, "end"),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child: Button(
+                  text: "Apply Filters",
+                  backgroundColor: Constants.pink(),
+                  textColor: Colors.white,
+                  onPress: () {
+                    print("TODO Apply Filters!");
+                  },
+                ),
+              )
             ],
           )));
 }

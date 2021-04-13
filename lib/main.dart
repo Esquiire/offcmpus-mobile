@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobile_fl/API/AuthAPI.dart';
 import 'package:mobile_fl/API/GQLConfig.dart';
 import 'package:mobile_fl/components/AuthWrapper.dart';
+import 'package:mobile_fl/constants.dart';
 import 'package:mobile_fl/screens/Login.dart';
 import 'package:mobile_fl/screens/Register.dart';
 import 'package:mobile_fl/screens/Search.dart';
@@ -41,9 +43,9 @@ class AppEntry extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return CupertinoApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
+        theme: CupertinoThemeData(
 
             // This is the theme of your application.
             //
@@ -54,7 +56,8 @@ class AppEntry extends StatelessWidget {
             // or simply save your changes to "hot reload" in a Flutter IDE).
             // Notice that the counter didn't reset back to zero; the application
             // is not restarted.
-            primarySwatch: Colors.blueGrey),
+            brightness: Brightness.light,
+            primaryContrastingColor: Constants.pink()),
         initialRoute: '/',
         routes: {
           '/': (context) => AppEntryScreen(),

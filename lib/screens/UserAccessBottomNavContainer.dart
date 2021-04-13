@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_fl/components/AuthWrapper.dart';
 import 'package:mobile_fl/screens/Search.dart';
@@ -42,14 +43,26 @@ class _UserAccessBottomNavContainerState
     return AuthWrapper(
         authLevel: AuthLevels.STUDENT,
         ctx: ctx,
-        body: Scaffold(
-            body: Column(
-              children: [
-                AppHeader(views.elementAt(_selectedPage).label),
-                Expanded(child: views.elementAt(_selectedPage).view, flex: 1)
-              ],
-            ),
-            bottomNavigationBar: BottomNavigationBar(
+        body: CupertinoTabScaffold(
+            // body: Column(
+            //   children: [
+            //     AppHeader(views.elementAt(_selectedPage).label),
+            //     Expanded(child: views.elementAt(_selectedPage).view, flex: 1)
+            //   ],
+            // ),
+            tabBuilder: (BuildContext context, int index) {
+              return CupertinoTabView(builder: (BuildContext context) {
+                return CupertinoPageScaffold(
+                    child: Column(
+                  children: [
+                    AppHeader(views.elementAt(_selectedPage).label),
+                    Expanded(
+                        child: views.elementAt(_selectedPage).view, flex: 1)
+                  ],
+                ));
+              });
+            },
+            tabBar: CupertinoTabBar(
               items: (() {
                 List<BottomNavigationBarItem> tabs = [];
                 for (int i = 0; i < views.length; ++i) {
@@ -60,7 +73,7 @@ class _UserAccessBottomNavContainerState
               })(),
               currentIndex: _selectedPage,
               onTap: _changeViewOnTap,
-              selectedItemColor: Constants.pink(),
+              activeColor: Constants.pink(),
             )));
   }
 }

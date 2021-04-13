@@ -56,7 +56,6 @@ class _UserAccessBottomNavContainerState
         ctx: ctx,
         body: WillPopScope(
             onWillPop: () async {
-              print("in onWillPop()");
               return !await views
                   .elementAt(_selectedPage)
                   .getGlobalKey()

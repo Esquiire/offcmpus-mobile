@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobile_fl/API/AuthAPI.dart';
@@ -8,6 +9,7 @@ import 'package:mobile_fl/API/queries/PropertyQuery.dart';
 import 'package:mobile_fl/components/AuthWrapper.dart';
 import 'package:mobile_fl/components/PropertyCard.dart';
 import 'package:mobile_fl/screens/Login.dart';
+import 'package:mobile_fl/screens/PropertyInfo.dart';
 import 'package:mobile_fl/screens/Register.dart';
 import 'package:mobile_fl/components/Input.dart';
 import 'package:mobile_fl/components/Button.dart';
@@ -52,7 +54,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void goToFilters(BuildContext ctx) {
     // navigate to the filters screen
     Navigator.of(ctx)
-        .push(MaterialPageRoute(builder: (context) => FilterScreen()));
+        .push(CupertinoPageRoute(builder: (context) => FilterScreen()));
   }
 
   @override
@@ -116,105 +118,117 @@ class NewPropertyCard extends StatefulWidget {
 
 class _NewPropertyCardState extends State<NewPropertyCard> {
   @override
-  Widget build(BuildContext ctx) => Container(
-        child: Stack(
-          children: [
-            Positioned(
-                child: Text(
-                  "\$300-600 /month",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                ),
-                right: 10,
-                top: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
-                  alignment: Alignment.topLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Text 1 Sample",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text("Troy NY, 12180")
-                    ],
+  Widget build(BuildContext ctx) => GestureDetector(
+        onTap: () {
+          Navigator.of(ctx).push(
+              CupertinoPageRoute(builder: (context) => PropertyInfoScreen()));
+        },
+        child: Container(
+          child: Stack(
+            children: [
+              Positioned(
+                  child: Text(
+                    "\$300-600 /month",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
-                ),
-                Container(
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                    child: Row(children: (() {
-                      List<String> tagStrs = ["Furnished", "Washer", "Heating"];
-                      List<Widget> tags = [];
+                  right: 10,
+                  top: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Text 1 Sample",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text("Troy NY, 12180")
+                      ],
+                    ),
+                  ),
+                  Container(
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      child: Row(children: (() {
+                        List<String> tagStrs = [
+                          "Furnished",
+                          "Washer",
+                          "Heating"
+                        ];
+                        List<Widget> tags = [];
 
-                      for (int i = 0; i < tagStrs.length; ++i) {
-                        tags.add(Container(
-                          child:
-                              Text(tagStrs[i], style: TextStyle(fontSize: 10)),
-                          padding: EdgeInsets.fromLTRB(6, 4, 6, 4),
-                          margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                          decoration: BoxDecoration(
-                              color: Constants.navy(opacity: 0.12),
-                              borderRadius: BorderRadius.circular(3)),
-                        ));
-                      }
-
-                      return tags;
-                    })())),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                  decoration: BoxDecoration(),
-                  constraints: BoxConstraints.expand(height: 100),
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: (() {
-                      List<Widget> imageHolderCards = [];
-
-                      for (int i = 0; i < 10; ++i) {
-                        imageHolderCards.add(Container(
+                        for (int i = 0; i < tagStrs.length; ++i) {
+                          tags.add(Container(
+                            child: Text(tagStrs[i],
+                                style: TextStyle(fontSize: 10)),
+                            padding: EdgeInsets.fromLTRB(6, 4, 6, 4),
+                            margin: EdgeInsets.fromLTRB(0, 0, 5, 0),
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Color.fromRGBO(
-                                    Random().nextInt(256),
-                                    Random().nextInt(256),
-                                    Random().nextInt(256),
-                                    1.0)),
-                            margin:
-                                EdgeInsets.fromLTRB(i == 0 ? 10 : 0, 0, 10, 0),
-                            constraints: BoxConstraints.tightFor(
-                              width: (Random().nextDouble() * 150) + 100,
-                              height: 100,
-                            )));
-                      }
-                      return imageHolderCards;
-                    })(),
+                                color: Constants.navy(opacity: 0.12),
+                                borderRadius: BorderRadius.circular(3)),
+                          ));
+                        }
+
+                        return tags;
+                      })())),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    decoration: BoxDecoration(),
+                    constraints: BoxConstraints.expand(height: 100),
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: (() {
+                        List<Widget> imageHolderCards = [];
+
+                        for (int i = 0; i < 10; ++i) {
+                          imageHolderCards.add(Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Color.fromRGBO(
+                                      Random().nextInt(256),
+                                      Random().nextInt(256),
+                                      Random().nextInt(256),
+                                      1.0)),
+                              margin: EdgeInsets.fromLTRB(
+                                  i == 0 ? 10 : 0, 0, 10, 0),
+                              constraints: BoxConstraints.tightFor(
+                                width: (Random().nextDouble() * 150) + 100,
+                                height: 100,
+                              )));
+                        }
+                        return imageHolderCards;
+                      })(),
+                    ),
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Text("Roe Jogan / 10 Photos / 4 Reviews",
-                      style: TextStyle(fontSize: 12)),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: RatingsComponent(RatingsComponent.TYPE_LANDLORD),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: RatingsComponent(RatingsComponent.TYPE_PROPERTY),
-                      )
-                    ],
+                  Container(
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Text("Roe Jogan / 10 Photos / 4 Reviews",
+                        style: TextStyle(fontSize: 12)),
                   ),
-                )
-              ],
-            )
-          ],
+                  Container(
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child:
+                              RatingsComponent(RatingsComponent.TYPE_LANDLORD),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child:
+                              RatingsComponent(RatingsComponent.TYPE_PROPERTY),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       );
 }
@@ -379,12 +393,18 @@ class RatingsComponent extends StatelessWidget {
           children: [
             Container(
               child: ratingType == TYPE_LANDLORD
-                  ? Icon(Icons.person_outline)
-                  : Icon(Icons.home),
+                  ? Icon(
+                      Icons.person_outline,
+                      color: Constants.navy(),
+                    )
+                  : Icon(
+                      Icons.home,
+                      color: Constants.navy(),
+                    ),
             ),
             Expanded(
               child: Container(
-                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
                 child: Text(
                   "*****",
                   style: TextStyle(fontSize: 40),

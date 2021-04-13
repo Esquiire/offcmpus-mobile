@@ -15,22 +15,33 @@ class ViewInfo {
   IconData icon;
   String label;
   Widget view;
+  static List<GlobalKey<NavigatorState>> tabNavKeys = [];
 
-  ViewInfo(this.icon, this.label, this.view);
+  int tabNavKeyIndex;
+
+  ViewInfo(this.icon, this.label, this.view) {
+    tabNavKeys.add(GlobalKey<NavigatorState>());
+    this.tabNavKeyIndex = tabNavKeys.length - 1;
+  }
+
+  GlobalKey<NavigatorState> getGlobalKey() => tabNavKeys[tabNavKeyIndex];
 }
 
 class _UserAccessBottomNavContainerState
     extends State<UserAccessBottomNavContainer> {
-  _UserAccessBottomNavContainerState() {
-    print("On page: UserAccessBottomNavContainerState");
-  }
-
+  CupertinoTabController tabController;
   int _selectedPage = 0;
+
   // define the views
   List<ViewInfo> views = <ViewInfo>[
     new ViewInfo(Icons.article, 'Feed', FeedScreen()),
     new ViewInfo(Icons.search, 'Search', SearchScreen())
   ];
+
+  _UserAccessBottomNavContainerState() {
+    super.initState();
+    this.tabController = CupertinoTabController(initialIndex: 0);
+  }
 
   void _changeViewOnTap(int index) {
     setState(() {
@@ -43,38 +54,44 @@ class _UserAccessBottomNavContainerState
     return AuthWrapper(
         authLevel: AuthLevels.STUDENT,
         ctx: ctx,
-        body: CupertinoTabScaffold(
-            // body: Column(
-            //   children: [
-            //     AppHeader(views.elementAt(_selectedPage).label),
-            //     Expanded(child: views.elementAt(_selectedPage).view, flex: 1)
-            //   ],
-            // ),
-            tabBuilder: (BuildContext context, int index) {
-              return CupertinoTabView(builder: (BuildContext context) {
-                return CupertinoPageScaffold(
-                    child: Column(
-                  children: [
-                    AppHeader(views.elementAt(_selectedPage).label),
-                    Expanded(
-                        child: views.elementAt(_selectedPage).view, flex: 1)
-                  ],
-                ));
-              });
+        body: WillPopScope(
+            onWillPop: () async {
+              print("in onWillPop()");
+              return !await views
+                  .elementAt(_selectedPage)
+                  .getGlobalKey()
+                  .currentState
+                  .maybePop();
             },
-            tabBar: CupertinoTabBar(
-              items: (() {
-                List<BottomNavigationBarItem> tabs = [];
-                for (int i = 0; i < views.length; ++i) {
-                  tabs.add(BottomNavigationBarItem(
-                      icon: Icon(views[i].icon), label: views[i].label));
-                }
-                return tabs;
-              })(),
-              currentIndex: _selectedPage,
-              onTap: _changeViewOnTap,
-              activeColor: Constants.pink(),
-            )));
+            child: CupertinoTabScaffold(
+                controller: this.tabController,
+                tabBuilder: (BuildContext context, int index) {
+                  return CupertinoTabView(
+                      navigatorKey: views.elementAt(index).getGlobalKey(),
+                      builder: (BuildContext context) {
+                        return CupertinoPageScaffold(
+                            child: Column(
+                          children: [
+                            AppHeader(views.elementAt(index).label),
+                            Expanded(
+                                child: views.elementAt(index).view, flex: 1)
+                          ],
+                        ));
+                      });
+                },
+                tabBar: CupertinoTabBar(
+                  items: (() {
+                    List<BottomNavigationBarItem> tabs = [];
+                    for (int i = 0; i < views.length; ++i) {
+                      tabs.add(BottomNavigationBarItem(
+                          icon: Icon(views[i].icon), label: views[i].label));
+                    }
+                    return tabs;
+                  })(),
+                  currentIndex: _selectedPage,
+                  onTap: _changeViewOnTap,
+                  activeColor: Constants.pink(),
+                ))));
   }
 }
 
@@ -158,8 +175,11 @@ class _DrawerButtonState extends State<DrawerButton> {
   Widget build(BuildContext ctx) => GestureDetector(
         child: Container(
           child: widget.mode == AppHeader.MODE_MENU
-              ? Icon(Icons.menu)
-              : Icon(Icons.chevron_left),
+              ? Icon(
+                  Icons.menu,
+                  color: Constants.navy(),
+                )
+              : Icon(Icons.chevron_left, color: Constants.navy()),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(5)),
               border:

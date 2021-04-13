@@ -7,5 +7,7 @@ class PropertyInfoScreen extends StatefulWidget {
 
 class _PropertyInfoScreenState extends State<PropertyInfoScreen> {
   @override
-  Widget build(BuildContext ctx) => Container();
+  Widget build(BuildContext ctx) => Column(
+        children: [Text("We are on the property info page now!")],
+      );
 }

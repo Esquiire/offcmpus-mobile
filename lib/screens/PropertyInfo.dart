@@ -78,6 +78,10 @@ class _PropertyInfoScreenState extends State<PropertyInfoScreen> {
                       SizedBox(
                         width: 220,
                         child: Button(
+                          onPress: () {
+                            Navigator.of(ctx).push(CupertinoPageRoute(
+                                builder: (context) => AvailableLeasesScreen()));
+                          },
                           text: "3 Leases Available",
                           textColor: Colors.white,
                           backgroundColor: Constants.pink(),
@@ -212,5 +216,112 @@ class _PropertyInfoScreenState extends State<PropertyInfoScreen> {
             ),
           )
         ],
+      );
+}
+
+class AvailableLeasesScreen extends StatefulWidget {
+  @override
+  _AvailableLeasesScreenState createState() => _AvailableLeasesScreenState();
+}
+
+class _AvailableLeasesScreenState extends State<AvailableLeasesScreen> {
+  @override
+  Widget build(BuildContext ctx) => Column(
+        children: [
+          AppHeader(
+            "Available Leases",
+            mode: AppHeader.MODE_BACK,
+            parentCtx: ctx,
+          ),
+          Container(
+            alignment: Alignment.topLeft,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  alignment: Alignment.topLeft,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              width: 1, color: Constants.navy(opacity: 0.3)))),
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: Column(
+                    children: [
+                      Container(
+                        child: Text(
+                          "3 Leases Available for Property",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        alignment: Alignment.topLeft,
+                      ),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        padding: EdgeInsets.fromLTRB(5, 10, 0, 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("2227 14th St"),
+                            Text("Troy NY, 12180")
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              child: ListView(
+                  children: (() =>
+                      [for (int i = 0; i < 10; ++i) AvailableLeaseModal()])()),
+              alignment: Alignment.topLeft,
+            ),
+            // child: ListView(
+            //     children: (() =>
+            //         [for (int i = 0; i < 10; ++i) AvailableLeaseModal()])()),
+          )
+        ],
+      );
+}
+
+class AvailableLeaseModal extends StatelessWidget {
+  @override
+  Widget build(BuildContext ctx) => Container(
+        alignment: Alignment.topLeft,
+        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+        child: Column(
+          children: [
+            Container(
+              child:
+                  Text("Room 1", style: TextStyle(fontWeight: FontWeight.bold)),
+              alignment: Alignment.topLeft,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [Text("Start Date"), Text("April 30, 2021")],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [Text("End Date"), Text("December 30, 2021")],
+            ),
+            Container(
+              alignment: Alignment.topRight,
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: SizedBox(
+                width: 200,
+                child: Button(
+                  text: "Request Lease",
+                  textColor: Colors.white,
+                  backgroundColor: Constants.pink(),
+                ),
+              ),
+            )
+          ],
+        ),
       );
 }

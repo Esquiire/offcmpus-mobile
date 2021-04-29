@@ -1,16 +1,15 @@
-# mobile_fl
+![Offcmpus Splash](img/offcmpus_splash.png)
 
-A new Flutter project.
+# Offcmpus Mobile
 
-## Getting Started
+This repo makes up the core of our mobile efforts for the Offcmpus platform, built with Flutter.
 
-This project is a starting point for a Flutter application.
+To compile and build this code, you need:
 
-A few resources to get you started if this is your first Flutter project:
+- Flutter 2.0 or later
+- Flutter SDK
+- Android Studio + Android SDK
+- Android Emulator from Studio or connected Android phone over USB
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+You can download Flutter [here](https://flutter.dev/docs/get-started/install).  Once Flutter is installed on the correct system, run `flutter doctor` in a command line (assuming Flutter was properly added to the PATH).  Complete the doctor requirements, and then Flutter will be ready to develop.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

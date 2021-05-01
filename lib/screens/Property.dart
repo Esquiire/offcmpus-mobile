@@ -16,6 +16,12 @@ import 'package:mobile_fl/main.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+
+/**
+ * @desc Special ImageCard widget, consisting of a simple container and Image.
+ * Seperate widget was built to allow for easy rescaling and redesigning on a 
+ * larger level, meaning we don't have to micromanage the cards in the future.
+ */
 class ImageCard extends StatelessWidget {
   const ImageCard({Key key}) : super(key: key);
   @override
@@ -32,9 +38,15 @@ class PropertyScreen extends StatefulWidget {
   _PropertyScreenState createState() => _PropertyScreenState();
 }
 
+
 class _PropertyScreenState extends State<PropertyScreen> {
   dynamic box;
-
+  
+  /**
+ * @desc When constructing our card carousel, we need a collection
+ * of ImageCard widgets which also needs to be built before the main window
+ * is rendered.  This is a temporary collection.
+ */
   List cardList = [ImageCard(), ImageCard(), ImageCard()];
 
   @override

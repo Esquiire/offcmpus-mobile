@@ -10,7 +10,11 @@ class PropertyInfoScreen extends StatefulWidget {
   @override
   _PropertyInfoScreenState createState() => _PropertyInfoScreenState();
 }
-
+/*
+* desc: Contains all property info for each of our properties. Able to 
+* describe tags, like heating, furnishing, or AC.  Can be style upgraded 
+* in the future to allow for cleaner views, is modular for the same reason.
+*/
 class _PropertyInfoScreenState extends State<PropertyInfoScreen> {
   @override
   Widget build(BuildContext ctx) => Column(
@@ -224,6 +228,13 @@ class AvailableLeasesScreen extends StatefulWidget {
   _AvailableLeasesScreenState createState() => _AvailableLeasesScreenState();
 }
 
+
+/*
+* desc: Details our screen for a property's available leases.  We pull
+* lease data from our backend, and utilize a modal to allow for cleaner 
+* and simpler user interaction.  Again, built as a seperate widget to 
+* allow for easy changes in the future.
+*/
 class _AvailableLeasesScreenState extends State<AvailableLeasesScreen> {
   @override
   Widget build(BuildContext ctx) => Column(

@@ -10,7 +10,16 @@ class PropertyCard extends StatefulWidget {
   _PropertyCardState createState() => _PropertyCardState();
 }
 
+/**
+ * @desc Our feed ListBuilder consists of PropertyCard widgets.
+ * Each PropertyCard has an image of the property, as well as price
+ * and a few key amenities.  Users can 'like' a property and save it for 
+ * later by tapping the heart button, which is state-managed.
+ */
+
 class _PropertyCardState extends State<PropertyCard> {
+  
+  //State management for heart icon
   int fabIconNumber = 0;
   Icon notLiked = Icon(
     Icons.favorite_border,
@@ -27,6 +36,8 @@ class _PropertyCardState extends State<PropertyCard> {
 
   @override
   Widget build(BuildContext ctx) {
+    // we can pull theme options from upper widgets,
+    // meaning future updates to theming is seamless.
     return Center(
       child: Card(
         child: InkWell(

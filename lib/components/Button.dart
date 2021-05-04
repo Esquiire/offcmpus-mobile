@@ -8,6 +8,11 @@ class Button extends StatelessWidget {
   final Color textColor;
   final Function onPress;
 
+  /** 
+   * @desc: Custom button widget, we created to let us change styles easily.
+   * Also to be able to change properties on state changes. 
+  **/
+
   Widget build(BuildContext ctx) {
     return GestureDetector(
       onTap: () {

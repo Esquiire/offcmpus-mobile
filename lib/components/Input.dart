@@ -5,7 +5,8 @@ void emptyHandeler(String _) {}
 
 /**
  * Custom Input:
- * Input field with validation
+ * Input field with validation.
+ * Further, allows for custom form creation.
 */
 class Input extends StatefulWidget {
   const Input(
